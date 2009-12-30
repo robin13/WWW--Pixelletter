@@ -106,9 +106,12 @@ sub sendFax
 {
     my( $self, $fax_number ) = @_;
     
-    if( ! $fax_number || $fax_number !~ m/^\+[0-9\-]*$/ )
+    if( ! $fax_number || $fax_number !~ m/^\+[0-9\- ]*$/ )
     {
-        die( "Not a valid fax number\n" );
+        die( "Not a valid fax number\n".
+             "Pixelletter only accepts fax numbers formated like this example: +49 89 12345678\n".
+             "You must have a '+' before the country code, and a space either side of the area " .
+             "code\n" );
     }
 
     if( $self->filecount() < 1 )
