@@ -27,6 +27,7 @@ This module requires these other modules and libraries:
 
 use LWP::UserAgent;
 use File::Util;
+use Locale::Country
 
 COPYRIGHT AND LICENCE
 
