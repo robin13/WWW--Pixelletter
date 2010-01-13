@@ -5,3 +5,4 @@ README
 test.pl
 lib/WWW/Pixelletter/API.pm
 t/WWW-Pixelletter-API.t
+samples/send_by_pixelletter.pl

@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use LWP::UserAgent;
 use File::Util;
+use Locale::Country;
 use 5.010000;
 our $VERSION = '0.1';
 use constant ALLOWED_FILE_EXTENSIONS => qw/pdf doc xls ppt rtf wpd psd odt ods odp odg/;
@@ -138,6 +139,57 @@ sub sendFax
 </pixelletter>
 !;
 
+    $self->_submitForm( $xml );
+}
+
+sub sendPost
+{
+    my( $self, $post_center, $dest_country ) = @_;
+    
+    if( ! $post_center || $post_center !~ m/^\d$/ || $post_center < 1 || $post_center > 3 )
+    {
+        die( "Not a valid post center id.  Valid are 1 to 3.\n" );
+    }
+    
+    # Check the destination country is a known ISO abbreviation
+    if( ! $dest_country || $dest_country !~ m/^\w{2}$/ || ! code2country( $dest_country ) )
+    {
+        die( "Not a valid destination country code.  Please use 2 character ISO3166 codes.\n" );
+    }
+    $dest_country = uc( $dest_country );
+
+    if( $self->filecount() < 1 )
+    {
+        die( "No files to send...\n" );
+    }
+
+    my $xml = qq!<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pixelletter version="1.0">
+  <auth>
+   <email>$self->{username}</email>
+   <password>$self->{password}</password>
+   <agb>ja</agb>
+   <widerrufsverzicht>ja</widerrufsverzicht>
+   <testmodus>$self->{test_mode}</testmodus>
+  </auth>
+  <order>
+    <options>
+      <type>upload</type>
+      <location>$post_center</location>
+      <destination>$dest_country</destination>
+      <action>1</action>
+     </options>
+  </order>
+</pixelletter>
+!;
+
+    $self->_submitForm( $xml );
+}
+
+
+sub _submitForm
+{
+    my( $self, $xml ) = @_;
     my %form = ( 'xml' => $xml );
     my $file_idx = 0;
     foreach( @{ $self->files() } )
@@ -167,11 +219,6 @@ sub sendFax
     die( "Send failed:\n$response_xml\n" );
 }
 
-sub sendPost
-{
-    my( $self, $post_center ) = @_;
-    die( "sendPost is not implemented yet!\n" );
-}
 __END__
 
 =pod
@@ -187,7 +234,9 @@ WWW::Pixelletter::API - an interface to the Pixelletter API
 
 =head1 DESCRIPTION
 
-Interface to pixelletter (http://pixelletter.de/) to allow sending faxes
+Interface to pixelletter (http://pixelletter.de/) to allow sending faxes.
+
+See the included samples folder for a simple send_by_pixelletter.pl script wrapper around this module.
 
 =head1 METHODS
 
@@ -233,11 +282,16 @@ Sends the files to the given fax number
 
 =head2 sendPost
 
-  $pl->sendPost( $mail_center );
+  $pl->sendPost( $post_center, $destination_country  );
 
 Sends the files by post (the first file should have the address field visible through an envelope window!)
 
-!! This function is not yet implemented !!
+  $post_center  should be an integer indicating the post center to be used.
+                Currently:  1 = Munich/Germany
+                            2 = Wien/Austria
+                            3 = Hamburg/Germany
+                Check the Pixelletter documentation to confirm!
+  $destination_countyr should be the 2 letter ISO code (e.g. 'DE', 'CH', 'AT' ...)
 
 =head1 AUTHOR
 
@@ -245,7 +299,7 @@ Robin Clarke C<rcl@cpan.org>
 
 =head1 LASTMOD
 
-29.12.2009
+13.01.2010
 
 =head1 CREATED
 
