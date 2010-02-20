@@ -3,6 +3,6 @@ Makefile.PL
 MANIFEST
 README
 test.pl
-lib/WWW/Pixelletter/API.pm
-t/WWW-Pixelletter-API.t
+lib/WWW/Pixelletter.pm
+t/WWW-Pixelletter.t
 samples/send_by_pixelletter.pl

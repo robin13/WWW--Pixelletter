@@ -4,7 +4,7 @@ BEGIN { plan tests => 2 }
 use strict;
 use warnings;
 
-use WWW::Pixelletter::API;
+use WWW::Pixelletter;
 
 ok( 1 );
 
@@ -16,6 +16,6 @@ my %params = ( username  => 'test',
 my $pl;
 eval
 {
-    $pl = new WWW::Pixelletter::API( %params );
+    $pl = new WWW::Pixelletter( %params );
 };
 ok( defined( $pl ), 1, 'Error creating new object: ' . $@ );

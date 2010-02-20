@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use WWW::Pixelletter::API;
+use WWW::Pixelletter;
 
 my $username  = 'your_email';
 my $password  = 'your_password';
@@ -10,7 +10,7 @@ my $test_mode = 'false';  # Set to 'true' for testing without costs!
 eval
 {
     # Create the object
-    my $pl = WWW::Pixelletter::API->new( 'username' => $username, 'password' => $password, 'test_mode' => $test_mode );
+    my $pl = WWW::Pixelletter->new( 'username' => $username, 'password' => $password, 'test_mode' => $test_mode );
 
     # Add any files passed as arguments
     foreach( @ARGV )
@@ -81,7 +81,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A sample interactive script to use the WWW::Pixelletter::API script to send files by fax or post.
+A sample interactive script to use the WWW::Pixelletter script to send files by fax or post.
 It will ask you to enter the necessary details.
 
 = cut
