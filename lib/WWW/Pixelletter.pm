@@ -5,7 +5,7 @@ use LWP::UserAgent;
 use File::Util;
 use Locale::Country;
 use 5.010000;
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 use constant ALLOWED_FILE_EXTENSIONS => qw/pdf doc xls ppt rtf wpd psd odt ods odp odg/;
 use constant MAX_FILE_SIZE => 8388607;
 
