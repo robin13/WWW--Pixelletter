@@ -79,7 +79,11 @@ sub addFile
     # Make sure file is not too big (pixelletter only accepts up to 8MB
     if( $f->size( $file ) > MAX_FILE_SIZE )
     {
-        die( "Cannot process $file because pixelletter only allowes files up to MAX_FILE_SIZE bytes\n" );
+        die( sprintf( "Cannot process %s because pixelletter only allowes files up to %u bytes but yours is %u bytes\n",
+                $file,
+                MAX_FILE_SIZE,
+                $f->size( $file ),
+                ) );
     }
 
     # Add the file to the form
